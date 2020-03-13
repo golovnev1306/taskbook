@@ -11,7 +11,7 @@ body {
 }
 
 .wrap > .container {
-    padding: 30px 15px 20px;
+    padding: 10px 15px 20px;
 }
 
 .footer {
@@ -24,6 +24,7 @@ body {
 .tasks{
     display:flex;
     flex-flow:column nowrap;
+    margin-top: 19px;
 }
 
 .task{

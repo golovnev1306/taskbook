@@ -116,11 +116,14 @@ unset($_SESSION['success']);
   </div>
 </div>
 
-
+<?php
+if($tasks){
+  echo "<h2>Список задач</h2>";
+}
+  ?>
 <div class='tasks'>
 <?php
 if($tasks){
-  echo "<div class='col-xs-12'><h2>Список задач</h2></div>";
     foreach($tasks as $task){?>
         <div class='task col-xs-12' data-id='<?=$task['id']?>'>
           <div class='taskName'><?=$task['user_name'];?></div>
