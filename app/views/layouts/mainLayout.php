@@ -30,7 +30,7 @@
     </div>
     <div class="collapse navbar-collapse" id="navbar-main">
     <ul class="nav navbar-nav">
-        <li><?php if(!$_SESSION['user']['isLogin']){?>
+        <li><?php if(!$_SESSION['user']['isAdmin']){?>
                         <a class="nav-link" href="/login">Вход</a>
                     <?php } else {?>
                         <a class="nav-link" href="/logout">Выход (<?=$_SESSION['user']['name']?>)</a>
@@ -44,7 +44,7 @@
 </nav>
 
     <div class="container">
-		<?php include "{$_SERVER['DOCUMENT_ROOT']}/app/views/$contentView"; ?>	
+		<?php include $contentView; ?>	
     </div>
 </div>
 

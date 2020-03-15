@@ -2,7 +2,7 @@
 
 class User extends Model
 {
-    public static function GetAll()
+    public static function getAll()
     {
         return ['admin' => '123'];
     }

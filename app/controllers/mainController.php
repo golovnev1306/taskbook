@@ -5,32 +5,32 @@ include 'app/models/User.php';
 class mainController extends Controller
 {
     public function indexAction(){
-        $tasks = Task::GetAll();
-        $paginationInfo = $tasks['paginationInfo'];
-        unset($tasks['paginationInfo']);
-
-        $this->view->generate('main.php', 'mainLayout.php', ['tasks' => $tasks, 'paginationInfo' => $paginationInfo]);
+        
+        $pagination = new Pagination(['numTaskOnPage' => 3]);
+        $tasks = Task::getAll($pagination);
+        $this->view->generate('main', 'mainLayout', ['tasks' => $tasks, 'pagination' => $pagination]);
     }
 
     public function loginAction(){
-        if($_SESSION['user']['isLogin']){
-            $host = 'http://'.$_SERVER['HTTP_HOST'].'/';
-            header('Location:'.$host);
+        if($_SESSION['user']['isAdmin']){
+            $host = "http://{$_SERVER['HTTP_HOST']}/";
+            header("Location: $host");
         } else {
             if(!empty($_POST)){
                 $login = htmlspecialchars($_POST['login'], ENT_QUOTES);
                 $pass = htmlspecialchars($_POST['pass'], ENT_QUOTES);
-                $users = User::GetAll();
+                $users = User::getAll();
                 if($users[$login] && $users[$login] == $pass){
-                    $_SESSION['user'] = ['isLogin' => 1, 
-                                        'name' => $login];
+                    $_SESSION['user'] = ['isAdmin' => 1, 
+                                            'name' => $login
+                                        ];
                     echo 1;
                 } else {
                     echo 'Некорректные логин/пароль';
                 }
                 
             } else {
-                $this->view->generate('login.php', 'mainLayout.php');
+                $this->view->generate('login', 'mainLayout');
             }
         }
     }
@@ -43,7 +43,7 @@ class mainController extends Controller
 
 
     public function page404Action(){
-        $this->view->generate('404.php', 'mainLayout.php');
+        $this->view->generate('404', 'mainLayout');
     }
 
     public function addtaskAction(){
@@ -61,7 +61,7 @@ class mainController extends Controller
                 }
             }
         }
-        if(Task::insertTask($_POST)){
+        if(Task::insert($_POST)){
             $_SESSION['success'] = 'Задача успешно создана';
             echo 1;
         } else {
@@ -113,10 +113,10 @@ class mainController extends Controller
 
     public function deletetaskAction()
     {
-        if($_SESSION['user']['isLogin']){
+        if($_SESSION['user']['isAdmin']){
             if($_POST['id']){
                 $id = intval($_POST['id']);
-                if(Task::deleteTask($id)){
+                if(Task::delete($id)){
                     $_SESSION['success'] = 'Задача успешно удалена';
                     echo 1;
                 } else {
@@ -135,10 +135,10 @@ class mainController extends Controller
 
     public function performtaskAction()
     {
-        if($_SESSION['user']['isLogin']){
+        if($_SESSION['user']['isAdmin']){
             if($_POST['id']){
                 $id = intval($_POST['id']);
-                if(Task::performTask($id)){
+                if(Task::perform($id)){
                     $_SESSION['success'] = 'Отметка о выполнении поставлена';
                     echo 1;
                 } else {
@@ -157,7 +157,7 @@ class mainController extends Controller
 
     public function edittaskAction()
     {
-        if($_SESSION['user']['isLogin']){
+        if($_SESSION['user']['isAdmin']){
             if ($_POST) {
                 foreach($_POST as $key => $value){
                     if ($key == 'email') {
@@ -172,7 +172,7 @@ class mainController extends Controller
                     }
                 }
             }
-            if(Task::updateTask($_POST)){
+            if(Task::update($_POST)){
                 $_SESSION['success'] = 'Задача успешно изменена';
                 echo 1;
             } else {

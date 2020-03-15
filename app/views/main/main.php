@@ -128,7 +128,7 @@ if($tasks){
         <div class='task col-xs-12' data-id='<?=$task['id']?>'>
           <div class='taskName'><?=$task['user_name'];?></div>
           <div class='taskEmail'><?=$task['email'];?></div>
-          <?php if($_SESSION['user']['isLogin']){?>
+          <?php if($_SESSION['user']['isAdmin']){?>
           <div class='taskControlButtons'>
           <?php if(!$task['is_performed']){?><span title="Поставить отметку о выполнении" class="glyphicon glyphicon-ok performed"></span><?php }?>
             <span title="Редактировать"><span data-toggle="modal" data-target="#editModal" class='glyphicon glyphicon-pencil edit'></span></span>
@@ -151,22 +151,7 @@ if($tasks){
 </div>
 <div class="pagination">
 <?php
-// Проверяем нужны ли стрелки назад
-if ($paginationInfo['page'] != 1) $pervpage = '<div><a href= ./index?page=1><<</a></div>
-                               <div><a href= ./index?page='. ($paginationInfo['page'] - 1) .'><</a></div> ';
-// Проверяем нужны ли стрелки вперед
-if ($paginationInfo['page'] != $paginationInfo['countPage']) $nextpage = ' <div><a href= ./index?page='. ($paginationInfo['page'] + 1) .'>></a></div>
-                                   <div><a href= ./index?page=' .$paginationInfo['countPage']. '>>></a></div>';
-
-// Находим две ближайшие станицы с обоих краев, если они есть
-if($paginationInfo['page'] - 2 > 0) $page2left = ' <a href= ./index?page='. ($paginationInfo['page'] - 2) .'>'. ($paginationInfo['page'] - 2) .'</a>';
-if($paginationInfo['page'] - 1 > 0) $page1left = '<a href= ./index?page='. ($paginationInfo['page'] - 1) .'>'. ($paginationInfo['page'] - 1) .'</a>';
-if($paginationInfo['page'] + 2 <= $paginationInfo['countPage']) $page2right = '<a href= ./index?page='. ($paginationInfo['page'] + 2) .'>'. ($paginationInfo['page'] + 2) .'</a>';
-if($paginationInfo['page'] + 1 <= $paginationInfo['countPage']) $page1right = '<a href= ./index?page='. ($paginationInfo['page'] + 1) .'>'. ($paginationInfo['page'] + 1) .'</a>';
-
-// Вывод меню
-echo "$pervpage<div>$page2left</div><div>$page1left</div><div class='active'>{$paginationInfo['page']}</div><div>$page1right</div><div>$page2right</div>$nextpage";
-
+echo $pagination->getButtons();
 ?>
 </div>
 <?php
