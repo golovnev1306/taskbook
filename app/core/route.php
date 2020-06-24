@@ -1,8 +1,10 @@
 <?php
+
 class Route
 {
 	static function start()
 	{
+		global $settings;
         $controller = 'main';
         $action = 'index';
         $routes = explode("/", $_SERVER['REQUEST_URI']);
@@ -38,9 +40,9 @@ class Route
     }
 
     static function Error404(){
-        $host = 'http://'.$_SERVER['HTTP_HOST'].'/';
+        $host = 'http://' . $_SERVER['HTTP_HOST'].'/';
         header('HTTP/1.1 404 Not Found');
 		header("Status: 404 Not Found");
-		header('Location:'.$host.'page404');
+		header('Location:' . $host . 'page404');
     }
 }
